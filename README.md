@@ -1,6 +1,6 @@
 # POS-System-Home-Decoration-Store
 
-POS-System-Home-Decoration-Store เป็นส่วนหนึ่งของวิชา Principle of Software Design and Development
+POS-System-Home-Decoration-Store เป็นส่วนหนึ่งของโครงงานรายวิชา Principle of Software Design and Development
 
 ## รายละเอียดเพิ่มเติม
 
