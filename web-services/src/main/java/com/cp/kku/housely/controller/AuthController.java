@@ -1,11 +1,9 @@
 package com.cp.kku.housely.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import com.cp.kku.housely.model.User;
 import com.cp.kku.housely.service.UserService;
 
@@ -13,8 +11,11 @@ import com.cp.kku.housely.service.UserService;
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public AuthController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/login")
     public String login() {

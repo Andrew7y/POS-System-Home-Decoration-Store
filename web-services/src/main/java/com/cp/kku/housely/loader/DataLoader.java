@@ -18,11 +18,21 @@ public class DataLoader implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
-        User user = new User();
-        user.setUsername("user");
-        user.setPassword(passwordEncoder.encode("password"));
-        user.setRole("ROLE_USER");
-        userRepository.save(user);
+    public void run(String... args){
+        User admin = new User();
+        userRepository.findByUsername("admin").ifPresentOrElse(
+                user -> {
+                    admin.setId(user.getId());
+                    admin.setUsername(user.getUsername());
+                    admin.setPassword(user.getPassword());
+                    admin.setRole(user.getRole());
+                },
+                () -> {
+                    admin.setUsername("admin");
+                    admin.setPassword(passwordEncoder.encode("admin"));
+                    admin.setRole("ADMIN");
+                    userRepository.save(admin);
+                }
+        );
     }
 }

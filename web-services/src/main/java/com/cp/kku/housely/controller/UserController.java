@@ -24,12 +24,15 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
-    private ProductService productService;
-    @Autowired
-    private CategoryService categoryService;
-    @Autowired
-    private RoomService roomService;
+    private final ProductService productService;
+    private final CategoryService categoryService;
+    private final RoomService roomService;
+
+    public UserController(ProductService productService, CategoryService categoryService, RoomService roomService) {
+        this.productService = productService;
+        this.categoryService = categoryService;
+        this.roomService = roomService;
+    }
 
     @GetMapping("/product")
     public String showProducts(Model model) {

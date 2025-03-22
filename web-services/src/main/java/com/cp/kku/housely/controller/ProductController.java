@@ -7,8 +7,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.cp.kku.housely.model.Category;
 import com.cp.kku.housely.model.Product;
 import com.cp.kku.housely.model.Room;
@@ -32,12 +29,15 @@ import com.cp.kku.housely.service.RoomService;
 @RequestMapping("/admin/products")
 public class ProductController {
 
-    @Autowired
-    private ProductService productService;
-    @Autowired
-    private CategoryService categoryService;
-    @Autowired
-    private RoomService roomService;
+    private final ProductService productService;
+    private final CategoryService categoryService;
+    private final RoomService roomService;
+
+    public ProductController(ProductService productService, CategoryService categoryService, RoomService roomService) {
+        this.productService = productService;
+        this.categoryService = categoryService;
+        this.roomService = roomService;
+    }
 
     @GetMapping("/detail/{id}")
     public String showProductDetail(@PathVariable Long id, Model model) {
@@ -69,12 +69,6 @@ public class ProductController {
         handleImageUpload(product, file);
         setProductCategoriesAndRooms(product, categoryIds, roomIds);
         productService.createProduct(product).block();
-        try {
-            Thread.sleep(500); 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        
         return "redirect:/admin/products";
     }
     @Value("${upload.path}")
@@ -108,11 +102,6 @@ public class ProductController {
 
         setProductCategoriesAndRooms(product, categoryIds, roomIds);
         productService.createProduct(product).block();
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }        
         return "redirect:/admin/products";
     }
 
@@ -124,8 +113,7 @@ public class ProductController {
                 Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
                 product.setImageBase64(fileName);
             } catch (IOException e) {
-                e.printStackTrace();
-                // Consider proper error handling here
+               System.out.println("Error uploading image: " + e.getMessage());
             }
         }
     }

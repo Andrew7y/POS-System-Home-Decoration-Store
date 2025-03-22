@@ -48,9 +48,10 @@ public class SecurityConfig {
     @Bean
     public AuthenticationSuccessHandler customSuccessHandler() {
         return (HttpServletRequest request, HttpServletResponse response, Authentication authentication) -> {
-            authentication.getAuthorities().forEach(authority ->
-                    System.out.println("Current Role: " + authority.getAuthority())
-            );
+            for (var grantedAuthority : authentication.getAuthorities()) {
+                System.out.println("Role: " + grantedAuthority.getAuthority());
+
+            }
             if (authentication.getAuthorities().stream()
                     .anyMatch(
                             grantedAuthority -> grantedAuthority
@@ -61,7 +62,7 @@ public class SecurityConfig {
                 response.sendRedirect("/admin/home");
             } else {
                 response.sendRedirect("/user/product");
-                System.out.println("User: " + authentication.getAuthorities());
+                System.out.println("User");
             }
         };
     }
